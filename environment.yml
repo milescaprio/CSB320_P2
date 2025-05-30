@@ -1,0 +1,25 @@
+name: csb320-p2
+channels:
+  - rapidsai
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - scikit-learn
+  - imbalanced-learn
+  - seaborn
+  - matplotlib
+  - ipython
+  - pip
+  - ipykernel
+  - nltk
+  - cudatoolkit=11.8
+  - cuml=24.02
+  - pip:
+    - black[jupyter]
+    - black
+    - jupyterlab_code_formatter
+    - flake8
