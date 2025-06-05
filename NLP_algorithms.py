@@ -1,4 +1,18 @@
-from lib import *
+from lib import (
+    pd,
+    BaseEstimator,
+    TransformerMixin,
+    Pipeline,
+    TfidfVectorizer,
+    CountVectorizer,
+    ColumnTransformer,
+    OneHotEncoder,
+    RandomForestClassifier,
+    np,
+    TextBlob,
+    preprocess,
+    grs,
+)
 
 
 def get_textvec_pipeline(
@@ -23,23 +37,34 @@ def get_textvec_pipeline(
             overall = blob.sentiment.polarity
             sentences = blob.sentences
             first = sentences[0].sentiment.polarity if sentences else 0
-            last = sentences[-1].sentiment.polarity if len(sentences) > 1 else 0
+            last = (
+                sentences[-1].sentiment.polarity if len(sentences) > 1 else 0
+            )
             return [overall, first, last]
 
         def transform(self, X):
-            print(f"[DEBUG] type(X): {type(X)}, shape: {getattr(X, 'shape', None)}")
+            print(
+                f"[DEBUG] type(X): \
+                    {type(X)}, shape: {getattr(X, 'shape', None)}"
+            )
             if isinstance(X, pd.DataFrame):
                 text_series = X.iloc[:, 0]
             elif isinstance(X, np.ndarray):
                 # fall back to column index 0
                 text_series = pd.Series(X[:, 0])
             else:
-                raise ValueError("SentimentFeatures expected DataFrame or 2D array")
+                raise ValueError(
+                    "SentimentFeatures expected DataFrame or 2D array"
+                )
 
             sentiments = text_series.apply(self.get_sentiment)
             return pd.DataFrame(
                 sentiments.tolist(),
-                columns=["overall_sentiment", "first_sentiment", "last_sentiment"],
+                columns=[
+                    "overall_sentiment",
+                    "first_sentiment",
+                    "last_sentiment",
+                ],
             )
 
     if tf_idf:
@@ -72,7 +97,9 @@ def get_textvec_pipeline(
             ]
         )
 
-    categorical = Pipeline([("onehot", OneHotEncoder(handle_unknown="ignore"))])
+    categorical = Pipeline(
+        [("onehot", OneHotEncoder(handle_unknown="ignore"))]
+    )
 
     sentiment = Pipeline(
         [("sentiment_extractor", SentimentFeatures(text_column=text_column))]
@@ -99,14 +126,18 @@ def get_textvec_pipeline(
                 (
                     "regressor",
                     RandomForestClassifier(
-                        n_estimators=100, max_depth=10, random_state=grs, n_jobs=-1
+                        n_estimators=100,
+                        max_depth=10,
+                        random_state=grs,
+                        n_jobs=-1,
                     ),
                 ),
             ]
         )
         return model
 
-    # TODO: Try PCA ( See previous code attempts in first draft file and in first draft's recycled.py file)
+    # TODO: Try PCA ( See previous code attempts in
+    # first draft file and in first draft's recycled.py file)
 
 
 def get_textvect_grid_search_params(

@@ -1,3 +1,5 @@
+# flake8: noqa: F401
+
 import config
 
 import numpy as np
@@ -16,6 +18,8 @@ import os
 import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
+from textblob import TextBlob, Word
+from textblob import download_corpora
 
 
 # Context manager to suppress stdout and stderr
@@ -38,8 +42,6 @@ with suppress_output():
     nltk.download("stopwords")
     nltk.download("wordnet")
 
-from textblob import TextBlob, Word
-from textblob import download_corpora
 
 download_corpora.download_all()
 
@@ -50,7 +52,11 @@ if config.USE_CUML:
     from cuml.linear_model import PCA
     from cuml.linear_model import LogisticRegression
     from cuml.model_selection import train_test_split
-    from cuml.metrics import classification_report, accuracy_score, confusion_matrix
+    from cuml.metrics import (
+        classification_report,
+        accuracy_score,
+        confusion_matrix,
+    )
     from cuml.metrics import roc_auc_score, roc_curve
     from cuml.metrics import f1_score, precision_score, recall_score
     from cuml.metrics import make_scorer
@@ -63,13 +69,23 @@ if config.USE_CUML:
     from cuml.preprocessing import OneHotEncoder
     from cuml.compose import ColumnTransformer
 else:
-    from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+    from sklearn.feature_extraction.text import (
+        TfidfVectorizer,
+        CountVectorizer,
+    )
     from sklearn.decomposition import PCA
     from sklearn.linear_model import LogisticRegression
-    from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+    from sklearn.ensemble import (
+        RandomForestClassifier,
+        GradientBoostingClassifier,
+    )
 
     from sklearn.model_selection import train_test_split
-    from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+    from sklearn.metrics import (
+        classification_report,
+        accuracy_score,
+        confusion_matrix,
+    )
     from sklearn.metrics import roc_auc_score, roc_curve
     from sklearn.metrics import f1_score, precision_score, recall_score
     from sklearn.metrics import make_scorer

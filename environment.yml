@@ -24,3 +24,5 @@ dependencies:
     - jupyterlab_code_formatter
     - flake8
     - textblob
+    - nbqa
+    - flake8
